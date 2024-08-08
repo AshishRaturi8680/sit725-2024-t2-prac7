@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Speccells Project</title>
+    <meta name="description" content="Speccells: A platform to explore detailed phone specifications">
+    <meta name="author" content="Ashish">
+    <meta property="og:title" content="Speccells Project">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="Speccells: A platform to explore detailed phone specifications">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: url('images/background.jpeg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-wrapper {
+            background-color: #263238;
+        }
+
+        .brand-logo img {
+            height: 50px;
+        }
+
+        .main-body {
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            margin: 20px auto;
+            max-width: 1200px;
+        }
+
+        #heading {
+            color: #263238;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .flow-text {
+            color: #607d8b;
+        }
+
+        .card {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            background-color: #ffffff;
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-image img {
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            width: 100%;
+            height: auto;
+        }
+
+        .card-content {
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+
+        .card-title {
+            color: #263238;
+            font-weight: 700;
+        }
+
+        .card-content p {
+            margin: 10px 0;
+            color: #000000; /* Ensure text color is black */
+        }
+
+        .card-content p strong {
+            color: #263238; /* Highlight labels */
+        }
+
+        .modal {
+            border-radius: 8px;
+        }
+
+        .modal-footer {
+            background-color: #eceff1;
+        }
+
+        .waves-effect {
+            background-color: #0288d1;
+            color: white;
+            margin-top: 20px;
+        }
+
+        .waves-effect:hover {
+            background-color: #0277bd;
+        }
+
+        .submitted-data {
+            background-color: #f5f5f5;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .submitted-data img {
+            max-width: 100%;
+            border-radius: 4px;
+        }
+
+        .submitted-data .details {
+            font-size: 16px;
+        }
+
+        .submitted-data .details p {
+            margin: 0;
+            padding: 5px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="nav-wrapper navbar-size">
+            <a href="#" class="brand-logo">Speccells</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-body">
+        <div class="container">
+            <div class="row">
+                <div class="col s12 center-align">
+                    <h1 id="heading">Welcome to Speccells</h1>
+                    <p class="flow-text">Explore and manage detailed phone specifications. Add and view phone details with ease.</p>
+                </div>
+                <div class="col s12 center-align">
+                    <img class="materialboxed materialboxed-image" src="images/background.jpg" alt="Demo Image">
+                </div>
+                <div class="col s12 center-align">
+                    <a class="waves-effect waves-light btn modal-trigger" id="clickMeButton" data-target="modal1" style="margin-top: 20px;">
+                        <i class="material-icons left">add</i>Add Phone
+                    </a>
+                </div>
+            </div>
+            <div class="row" id="card-section">
+                <!-- Phone cards will be dynamically added here -->
+            </div>
+        </div>
+
+        <div id="modal1" class="modal modal-fixed-footer">
+            <div class="modal-content">
+                <h4>Add Phone Specifications</h4>
+                <form id="phoneForm">
+                    <div class="input-field col s12">
+                        <input id="title" type="text" class="validate" required>
+                        <label for="title">Phone Name</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="brand" type="text" class="validate" required>
+                        <label for="brand">Brand</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="model" type="text" class="validate" required>
+                        <label for="model">Model</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="price" type="text" class="validate" required>
+                        <label for="price">Price</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="features" type="text" class="validate" required>
+                        <label for="features">Features</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="imageName" type="text" class="validate" required>
+                        <label for="imageName">Image Name (e.g., sample.jpg)</label>
+                    </div>
+                    <div class="input-field col s12 center-align">
+                        <button type="submit" id="formSubmit" class="waves-effect waves-light btn">Submit</button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="modal-close waves-effect waves-light btn">Close</a>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="js/scriptMongo.js"></script>
+    <script>
+        $(document).ready(function() {
+            var elems = document.querySelectorAll('.modal');
+            M.Modal.init(elems);
+
+            function loadPhones() {
+                $.ajax({
+                    url: 'http://localhost:3000/api/phones',
+                    method: 'GET',
+                    success: function(response) {
+                        var cards = '';
+                        response.data.forEach(function(phone) {
+                            cards += `
+                                <div class="col s12 m6 l4">
+                                    <div class="card">
+                                        <div class="card-image">
+                                            <img src="images/${phone.imageName}" alt="${phone.title}">
+                                        </div>
+                                        <div class="card-content">
+                                            <span class="card-title">${phone.title}</span>
+                                            <p><strong>Brand:</strong> ${phone.brand}</p>
+                                            <p><strong>Model:</strong> ${phone.model}</p>
+                                            <p><strong>Price:</strong> ${phone.price}</p>
+                                            <p><strong>Features:</strong> ${phone.features}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        $('#card-section').html(cards);
+                    },
+                    error: function(error) {
+                        console.error('Error fetching phones:', error);
+                    }
+                });
+            }
+
+            loadPhones();
+
+            $('#phoneForm').on('submit', function(event) {
+                event.preventDefault();
+
+                var title = $('#title').val();
+                var brand = $('#brand').val();
+                var model = $('#model').val();
+                var price = $('#price').val();
+                var features = $('#features').val();
+                var imageName = $('#imageName').val();
+
+                $.ajax({
+                    url: 'http://localhost:3000/api/phone',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        title: title,
+                        brand: brand,
+                        model: model,
+                        price: price,
+                        features: features,
+                        imageName: imageName
+                    }),
+                    success: function(response) {
+                        var newCard = `
+                            <div class="col s12 m6 l4">
+                                <div class="card">
+                                    <div class="card-image">
+                                        <img src="images/${response.data.imageName}" alt="${response.data.title}">
+                                    </div>
+                                    <div class="card-content">
+                                        <span class="card-title">${response.data.title}</span>
+                                        <p><font color=""black"><strong>Brand:</strong> ${response.data.brand}</p>
+                                        <p><strong>Model:</strong> ${response.data.model}</p>
+                                        <p><strong>Price:</strong> ${response.data.price}</p>
+                                        <p><strong>Features:</strong> ${response.data.features}</p></font>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        $('#card-section').append(newCard);
+                    },
+                    error: function(error) {
+                        console.error('Error adding phone:', error);
+                    }
+                });
+
+                var modal = M.Modal.getInstance($('#modal1'));
+                modal.close();
+                $('#phoneForm')[0].reset();
+            });
+        });
+    </script>
+</body>
+
+</html>

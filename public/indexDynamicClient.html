@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Speccells Project</title>
+    <meta name="description" content="Speccells: A platform to explore detailed phone specifications">
+    <meta name="author" content="Ashish">
+    <meta property="og:title" content="Speccells Project">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="Speccells: A platform to explore detailed phone specifications">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Custom Style Sheet -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo"><img class="user-image-size" src="images/logo.png" alt="Speccells Logo"></a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+    <main class="main-body">
+        <div class="container">
+            <div class="row">
+                <div class="col s12 center-align">
+                    <h1 id="heading">Welcome to Speccells</h1>
+                    <p class="flow-text">Explore and manage detailed phone specifications. Add and view phone details with ease.</p>
+                </div>
+                <div class="col s12 center-align">
+                    <a class="waves-effect waves-light btn modal-trigger" href="#modal1"><i class="material-icons left">add</i>Add Phone</a>
+                </div>
+            </div>
+            <div class="row" id="card-section">
+                <!-- Phone cards will be dynamically added here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <h5>Add Phone Specifications</h5>
+            <form id="phoneForm">
+                <div class="input-field">
+                    <input id="title" type="text" class="validate" required>
+                    <label for="title">Phone Name</label>
+                </div>
+                <div class="input-field">
+                    <input id="brand" type="text" class="validate" required>
+                    <label for="brand">Brand</label>
+                </div>
+                <div class="input-field">
+                    <input id="model" type="text" class="validate" required>
+                    <label for="model">Model</label>
+                </div>
+                <div class="input-field">
+                    <input id="price" type="text" class="validate" required>
+                    <label for="price">Price</label>
+                </div>
+                <div class="input-field">
+                    <input id="features" type="text" class="validate" required>
+                    <label for="features">Features</label>
+                </div>
+                <div class="input-field">
+                    <button type="submit" id="submitBtn" class="waves-effect waves-light btn">Submit</button>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="modal-close waves-effect waves-light btn">Close</a>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="js/scriptDynamicClient.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Initialize Materialize components
+            var elems = document.querySelectorAll('.modal');
+            M.Modal.init(elems);
+
+            // Fetch and display existing phones
+            function loadPhones() {
+                $.ajax({
+                    url: 'http://localhost:3000/api/phones',
+                    method: 'GET',
+                    success: function(response) {
+                        var cards = '';
+                        response.data.forEach(function(phone) {
+                            cards += `
+                                <div class="col s12 m6 l4">
+                                    <div class="card">
+                                        <div class="card-content">
+                                            <span class="card-title">${phone.title}</span>
+                                            <p><strong>Brand:</strong> ${phone.brand}</p>
+                                            <p><strong>Model:</strong> ${phone.model}</p>
+                                            <p><strong>Price:</strong> ${phone.price}</p>
+                                            <p><strong>Features:</strong> ${phone.features}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        $('#card-section').html(cards);
+                    },
+                    error: function(error) {
+                        console.error('Error fetching phones:', error);
+                    }
+                });
+            }
+
+            loadPhones();
+
+            $('#phoneForm').on('submit', function(event) {
+                event.preventDefault();
+
+                var title = $('#title').val();
+                var brand = $('#brand').val();
+                var model = $('#model').val();
+                var price = $('#price').val();
+                var features = $('#features').val();
+
+                $.ajax({
+                    url: 'http://localhost:3000/api/phone',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        title: title,
+                        brand: brand,
+                        model: model,
+                        price: price,
+                        features: features
+                    }),
+                    success: function(response) {
+                        var newCard = `
+                            <div class="col s12 m6 l4">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <span class="card-title">${response.data.title}</span>
+                                        <p><strong>Brand:</strong> ${response.data.brand}</p>
+                                        <p><strong>Model:</strong> ${response.data.model}</p>
+                                        <p><strong>Price:</strong> ${response.data.price}</p>
+                                        <p><strong>Features:</strong> ${response.data.features}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        $('#card-section').append(newCard);
+                    },
+                    error: function(error) {
+                        console.error('Error adding phone:', error);
+                    }
+                });
+
+                var modal = M.Modal.getInstance($('#modal1'));
+                modal.close();
+                $('#phoneForm')[0].reset();
+            });
+        });
+    </script>
+</body>
+
+</html>
