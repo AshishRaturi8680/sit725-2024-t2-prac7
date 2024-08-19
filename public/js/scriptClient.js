@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize Materialize components
     M.Modal.init(document.querySelectorAll('.modal'));
 
-    // Event listener for the phone form submission
+    // Event listener for the phone form submission (Static Setup)
     const form = document.getElementById('phoneForm');
     if (form) {
         form.addEventListener('submit', async (e) => {
@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 model: document.getElementById('model').value,
                 price: document.getElementById('price').value,
                 features: document.getElementById('features').value,
+                imageName: document.getElementById('imageName').value // For MongoDB setup
             };
 
             // Send form data to the server
@@ -45,6 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const card = `
                 <div class="col s12 m4 l3">
                     <div class="card">
+                        <div class="card-image">
+                            <img src="images/${phone.imageName}" alt="${phone.title}">
+                        </div>
                         <div class="card-content">
                             <span class="card-title">${phone.title}</span>
                             <p><strong>Brand:</strong> ${phone.brand}</p>

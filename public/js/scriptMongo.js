@@ -1,71 +1,53 @@
-const addCards = (items) => {
-    // Clear existing cards to prevent duplicates
-    $('#card-section').empty();
+document.addEventListener('DOMContentLoaded', function() {
+    const elems = document.querySelectorAll('.modal');
+    M.Modal.init(elems);
 
-    items.forEach(item => {
-        let itemToAppend = `
-            <div class="col s12 m6 l4">
+    const form = document.getElementById('phoneForm');
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const phone = {
+            title: document.getElementById('title').value,
+            brand: document.getElementById('brand').value,
+            model: document.getElementById('model').value,
+            price: document.getElementById('price').value,
+            features: document.getElementById('features').value,
+        };
+
+        try {
+            const response = await fetch('/api/phone', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(phone),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                M.toast({ html: 'Phone added successfully' });
+                addPhoneCard(data.data);
+            } else {
+                M.toast({ html: 'Error adding phone' });
+            }
+        } catch (error) {
+            M.toast({ html: 'Error adding phone' });
+        }
+    });
+
+    function addPhoneCard(phone) {
+        const cardSection = document.getElementById('card-section');
+        const card = `
+            <div class="col s12 m4 l3">
                 <div class="card">
-                    <div class="card-image">
-                        <img src="images/${item.imageName}" alt="${item.title}">
-                    </div>
                     <div class="card-content">
-                        <span class="card-title">${item.title}</span>
-                        <p><strong>Brand:</strong> ${item.brand}</p>
-                        <p><strong>Model:</strong> ${item.model}</p>
-                        <p><strong>Price:</strong> ${item.price}</p>
-                        <p><strong>Features:</strong> ${item.features}</p>
+                        <span class="card-title">${phone.title}</span>
+                        <p><strong>Brand:</strong> ${phone.brand}</p>
+                        <p><strong>Model:</strong> ${phone.model}</p>
+                        <p><strong>Price:</strong> ${phone.price}</p>
+                        <p><strong>Features:</strong> ${phone.features}</p>
                     </div>
                 </div>
             </div>
         `;
-        $("#card-section").append(itemToAppend);
-    });
-}
-
-const formSubmitted = () => {
-    let formData = {};
-    formData.title = $('#title').val();
-    formData.brand = $('#brand').val();
-    formData.model = $('#model').val();
-    formData.price = $('#price').val();
-    formData.features = $('#features').val();
-    formData.imageName = $('#imageName').val();
-
-    postPhone(formData);
-}
-
-function postPhone(phone) {
-    $.ajax({
-        url: '/api/phone',
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(phone),
-        success: (result) => {
-            if (result.statusCode === 201) {
-                alert('Phone added successfully');
-                getAllPhones(); // Refresh the list
-            }
-        },
-        error: (xhr, status, error) => {
-            console.error('Error adding phone:', error);
-        }
-    });
-}
-
-function getAllPhones() {
-    $.get('/api/phones', (response) => {
-        if (response.statusCode === 200) {
-            addCards(response.data);
-        }
-    });
-}
-
-$(document).ready(function() {
-    $('.materialboxed').materialbox();
-    $('#formSubmit').click(() => {
-        formSubmitted();
-    });
-    $('.modal').modal();
-    getAllPhones();
+        cardSection.insertAdjacentHTML('beforeend', card);
+    }
 });

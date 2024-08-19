@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Speccells Project</title>
+    <meta name="description" content="Speccells: A platform to explore detailed phone specifications">
+    <meta name="author" content="Ashish">
+    <meta property="og:title" content="Speccells Project">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="Speccells: A platform to explore detailed phone specifications">
+    <link rel="stylesheet" href="/css/materialize.min.css">
+    <link href="/css/material-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo"><img class="user-image-size" src="/images/logo.png" alt="Speccells Logo"></a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+    <main class="main-body">
+        <div class="container">
+            <div class="row">
+                <div class="col s12 center-align">
+                    <h1 id="heading">Welcome to Speccells</h1>
+                    <p class="flow-text">Explore and manage detailed phone specifications. Add and view phone details with ease.</p>
+                </div>
+                <div class="col s12 center-align">
+                    <a class="waves-effect waves-light btn modal-trigger" href="#modal1"><i class="material-icons left">add</i>Add Phone</a>
+                </div>
+            </div>
+            <div class="row" id="card-section">
+                <!-- Phone cards will be dynamically added here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <h5>Add Phone Specifications</h5>
+            <form id="phoneForm">
+                <div class="input-field">
+                    <input id="title" type="text" class="validate" required>
+                    <label for="title">Phone Name</label>
+                </div>
+                <div class="input-field">
+                    <input id="brand" type="text" class="validate" required>
+                    <label for="brand">Brand</label>
+                </div>
+                <div class="input-field">
+                    <input id="model" type="text" class="validate" required>
+                    <label for="model">Model</label>
+                </div>
+                <div class="input-field">
+                    <input id="price" type="text" class="validate" required>
+                    <label for="price">Price</label>
+                </div>
+                <div class="input-field">
+                    <input id="features" type="text" class="validate" required>
+                    <label for="features">Features</label>
+                </div>
+                <div class="input-field">
+                    <button type="submit" id="submitBtn" class="waves-effect waves-light btn">Submit</button>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="modal-close waves-effect waves-light btn">Close</a>
+        </div>
+    </div>
+
+    <script src="/js/materialize.min.js"></script>
+    <script src="/js/scriptdynamic.js"></script>
+</body>
+
+</html>
