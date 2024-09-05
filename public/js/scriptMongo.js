@@ -1,53 +1,41 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const elems = document.querySelectorAll('.modal');
-    M.Modal.init(elems);
+    var socket = io();  // Connect to the server using Socket.IO
 
-    const form = document.getElementById('phoneForm');
-    form.addEventListener('submit', async (e) => {
+    const phoneForm = document.getElementById('phoneForm');
+    const cardSection = document.getElementById('card-section');
+
+    phoneForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        const phone = {
+        const phoneData = {
             title: document.getElementById('title').value,
             brand: document.getElementById('brand').value,
             model: document.getElementById('model').value,
             price: document.getElementById('price').value,
-            features: document.getElementById('features').value,
+            features: document.getElementById('features').value
         };
 
-        try {
-            const response = await fetch('/api/phone', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(phone),
-            });
+        await fetch('/api/phone', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(phoneData)
+        });
 
-            if (response.ok) {
-                const data = await response.json();
-                M.toast({ html: 'Phone added successfully' });
-                addPhoneCard(data.data);
-            } else {
-                M.toast({ html: 'Error adding phone' });
-            }
-        } catch (error) {
-            M.toast({ html: 'Error adding phone' });
-        }
+        phoneForm.reset();
     });
 
-    function addPhoneCard(phone) {
-        const cardSection = document.getElementById('card-section');
-        const card = `
-            <div class="col s12 m4 l3">
-                <div class="card">
-                    <div class="card-content">
-                        <span class="card-title">${phone.title}</span>
-                        <p><strong>Brand:</strong> ${phone.brand}</p>
-                        <p><strong>Model:</strong> ${phone.model}</p>
-                        <p><strong>Price:</strong> ${phone.price}</p>
-                        <p><strong>Features:</strong> ${phone.features}</p>
-                    </div>
-                </div>
+    socket.on('phoneUpdate', (phone) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <div class="card-content">
+                <span class="card-title">${phone.title}</span>
+                <p>Brand: ${phone.brand}</p>
+                <p>Model: ${phone.model}</p>
+                <p>Price: ${phone.price}</p>
+                <p>Features: ${phone.features}</p>
             </div>
         `;
-        cardSection.insertAdjacentHTML('beforeend', card);
-    }
+        cardSection.appendChild(card);
+    });
 });

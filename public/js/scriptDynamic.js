@@ -1,39 +1,41 @@
+document.addEventListener('DOMContentLoaded', function() {
+    var socket = io();  // Connect to the server using Socket.IO
 
+    const phoneForm = document.getElementById('phoneForm');
+    const cardSection = document.getElementById('card-section');
 
-const getProjects = () => {
-    $.get('/api/projects', (response) => {
-        if (response.statusCode == 200) {
-            addCards(response.data);
-        }
-    })
-}
+    phoneForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-const addCards = (items) => {
-    items.forEach(item => {
-        let itemToAppend = '<div class="col s4 center-align">' +
-            '<div class="card medium"><div class="card-image waves-effect waves-block waves-light"><img class="activator" src="' + item.path + '">' +
-            '</div><div class="card-content">' +
-            '<span class="card-title activator grey-text text-darken-4">' + item.title + '<i class="material-icons right">more_vert</i></span><p><a href="#">' + item.link + '</a></p></div>' +
-            '<div class="card-reveal">' +
-            '<span class="card-title grey-text text-darken-4">' + item.title + '<i class="material-icons right">close</i></span>' +
-            '<p class="card-text">' + item.desciption + '</p>' +
-            '</div></div></div>';
-        $("#card-section").append(itemToAppend)
+        const phoneData = {
+            title: document.getElementById('title').value,
+            brand: document.getElementById('brand').value,
+            model: document.getElementById('model').value,
+            price: document.getElementById('price').value,
+            features: document.getElementById('features').value
+        };
+
+        await fetch('/api/phone', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(phoneData)
+        });
+
+        phoneForm.reset();
     });
-}
 
-const clickMe = () => {
-    alert("Thanks for clicking me. Hope you have a nice day!")
-}
-
-$(document).ready(function () {
-    $('.materialboxed').materialbox();
-    $('#formSubmit').click(() => {
-        formSumitted();
+    socket.on('phoneUpdate', (phone) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <div class="card-content">
+                <span class="card-title">${phone.title}</span>
+                <p>Brand: ${phone.brand}</p>
+                <p>Model: ${phone.model}</p>
+                <p>Price: ${phone.price}</p>
+                <p>Features: ${phone.features}</p>
+            </div>
+        `;
+        cardSection.appendChild(card);
     });
-    $('#clickMeButton').click(() => {
-        clickMe();
-    });
-    getProjects();
-    $('.modal').modal();
 });
